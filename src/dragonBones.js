@@ -736,7 +736,7 @@ var dragonBones;
                 this.displayControl = false;
 
                 for (var index in this._timelineStates) {
-                    (this._timelineStates[index]).fadeOut();
+                    this._timelineStates[index].fadeOut();
                 }
 
                 this.enabled = true;
@@ -893,7 +893,7 @@ var dragonBones;
                     }
 
                     for (var index in this._timelineStates) {
-                        (this._timelineStates[index]).update(progress);
+                        this._timelineStates[index].update(progress);
                     }
                     var frameList = this.clip.getFrameList();
                     if (frameList.length > 0) {
@@ -1562,7 +1562,7 @@ var dragonBones;
                 _super.prototype.dispose.call(this);
 
                 for (var timelineName in this._timelines) {
-                    (this._timelines[timelineName]).dispose();
+                    this._timelines[timelineName].dispose();
                 }
                 this._timelines = null;
             };
@@ -2886,7 +2886,7 @@ var dragonBones;
         Slot.prototype.getDisplay = function () {
             var display = this._displayList[this._displayIndex];
             if (display instanceof Armature) {
-                return (display).getDisplay();
+                return display.getDisplay();
             }
             return display;
         };
@@ -2974,7 +2974,7 @@ var dragonBones;
 
                     var display = this._displayList[this._displayIndex];
                     if (display instanceof Armature) {
-                        this._setDisplay((display).getDisplay());
+                        this._setDisplay(display.getDisplay());
                     } else {
                         this._setDisplay(display);
                     }
@@ -3086,7 +3086,7 @@ var dragonBones;
                 while (i--) {
                     var child = this._children[i];
                     if (child instanceof Slot) {
-                        (child)._updateVisible(this._visible);
+                        child._updateVisible(this._visible);
                     }
                 }
             }
@@ -3138,7 +3138,7 @@ var dragonBones;
                 throw new Error();
             }
 
-            if (child == this || (child instanceof Bone && (child).contains(this))) {
+            if (child == this || (child instanceof Bone && child.contains(this))) {
                 throw new Error("An Bone cannot be added as a child to itself or one of its children (or children's children, etc.)");
             }
 
@@ -3224,7 +3224,7 @@ var dragonBones;
                 if (frame.action) {
                     for (var index in this._children) {
                         if (this._children[index] instanceof Slot) {
-                            var childArmature = (this._children[index]).getChildArmature();
+                            var childArmature = this._children[index].getChildArmature();
                             if (childArmature) {
                                 childArmature.animation.gotoAndPlay(frame.action);
                             }
