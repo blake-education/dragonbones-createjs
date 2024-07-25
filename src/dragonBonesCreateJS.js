@@ -45,6 +45,19 @@ let __extends = function (d, b) {
             };
 
             CreateJSDisplayBridge.prototype.updateTransform = function (matrix, transform) {
+                /*
+                var pivotX:number = this._display.regX;
+                var pivotY:number = this._display.regY;
+                matrix.tx -= matrix.a * pivotX + matrix.c * pivotY;
+                matrix.ty -= matrix.b * pivotX + matrix.d * pivotY;
+                
+                this._display._matrix.a = matrix.a;
+                this._display._matrix.b = matrix.b;
+                this._display._matrix.c = matrix.c;
+                this._display._matrix.d = matrix.d;
+                this._display._matrix.tx = matrix.tx;
+                this._display._matrix.ty = matrix.ty;
+                */
                 this._display.x = matrix.tx;
                 this._display.y = matrix.ty;
                 this._display.skewX = transform.skewX * CreateJSDisplayBridge.RADIAN_TO_ANGLE;
@@ -123,16 +136,19 @@ let __extends = function (d, b) {
             function CreateJSFactory() {
                 _super.call(this);
             }
+            /** @private */
             CreateJSFactory.prototype._generateArmature = function () {
                 var armature = new dragonBones.Armature(new createjs.Container());
                 return armature;
             };
 
+            /** @private */
             CreateJSFactory.prototype._generateSlot = function () {
                 var slot = new dragonBones.Slot(new display.CreateJSDisplayBridge());
                 return slot;
             };
 
+            /** @private */
             CreateJSFactory.prototype._generateDisplay = function (textureAtlas, fullName, pivotX, pivotY) {
                 var rect = textureAtlas.getRegion(fullName);
                 if (rect) {
