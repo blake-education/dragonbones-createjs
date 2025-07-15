@@ -68,38 +68,7 @@ let __extends = function (d, b) {
 
             CreateJSDisplayBridge.prototype.updateColor = function (aOffset, rOffset, gOffset, bOffset, aMultiplier, rMultiplier, gMultiplier, bMultiplier) {
                 if (this._display) {
-                    var filters = this._display.filters;
-                    if (!filters) {
-                        this._display.filters = filters = [];
-                    }
-                    var colorFilter;
-                    if (filters.length > 0) {
-                        for (var index in filters) {
-                            if (filters[index] instanceof createjs.ColorFilter) {
-                                colorFilter = filters[index];
-                                break;
-                            }
-                        }
-                    }
-                    if (colorFilter) {
-                        colorFilter.alphaMultiplier = aMultiplier;
-                        colorFilter.redMultiplier = rMultiplier;
-                        colorFilter.greenMultiplier = gMultiplier;
-                        colorFilter.blueMultiplier = bMultiplier;
-                        colorFilter.alphaOffset = aOffset;
-                        colorFilter.redOffset = rOffset;
-                        colorFilter.greenOffset = gOffset;
-                        colorFilter.blueOffset = bOffset;
-                    } else {
-                        colorFilter = new createjs.ColorFilter(rMultiplier, gMultiplier, bMultiplier, aMultiplier, rOffset, gOffset, bOffset, aOffset);
-                        filters.push(colorFilter);
-                    }
-
-                    if (this._display.cacheCanvas) {
-                        this._display.updateCache();
-                    } else {
-                        this._display.cache(0, 0, (this._display).width, (this._display).height);
-                    }
+                    this._display.alpha = aMultiplier;
                 }
             };
 
@@ -109,7 +78,7 @@ let __extends = function (d, b) {
                     if (index < 0) {
                         parent.addChild(this._display);
                     } else {
-                        parent.addChildAt(this._display, Math.min(index, parent.getNumChildren()));
+                        parent.addChildAt(this._display, Math.min(index, parent.numChildren));
                     }
                 }
             };
@@ -184,22 +153,13 @@ let __extends = function (d, b) {
                 var rect = textureAtlas.getRegion(fullName);
                 if (rect) {
                     var shape = new createjs.Shape(null);
-                    CreateJSFactory._helpMatrix.a = 1;
-                    CreateJSFactory._helpMatrix.b = 0;
-                    CreateJSFactory._helpMatrix.c = 0;
-                    CreateJSFactory._helpMatrix.d = 1;
-                    CreateJSFactory._helpMatrix.scale(1 / textureAtlas.scale, 1 / textureAtlas.scale);
-                    CreateJSFactory._helpMatrix.tx = -pivotX - rect.x;
-                    CreateJSFactory._helpMatrix.ty = -pivotY - rect.y;
-                    shape.graphics.beginBitmapFill(textureAtlas.image, null, CreateJSFactory._helpMatrix);
+                    var m = new createjs.Matrix2D(1, 0, 0, 1, -pivotX - rect.x, -pivotY - rect.y)
+                    m.scale(1 / textureAtlas.scale, 1 / textureAtlas.scale);
+                    shape.graphics.beginBitmapFill(textureAtlas.image, null, m);
                     shape.graphics.drawRect(-pivotX, -pivotY, rect.width, rect.height);
-
-                    (shape).width = rect.width;
-                    (shape).height = rect.height;
                 }
                 return shape;
             };
-            CreateJSFactory._helpMatrix = new createjs.Matrix2D(1, 0, 0, 1, 0, 0);
             return CreateJSFactory;
         })(factorys.BaseFactory);
         factorys.CreateJSFactory = CreateJSFactory;
